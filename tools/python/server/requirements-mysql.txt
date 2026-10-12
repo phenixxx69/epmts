@@ -1,0 +1,2 @@
+# Only for backend = mysql
+pymysql[rsa]>=1.0

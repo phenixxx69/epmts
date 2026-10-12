@@ -1,0 +1,19 @@
+# Your packs and media never go to git
+packs/
+medias/
+*.zip
+
+# Local environments, downloads and caches
+.venv/
+tools/bin/
+cache/
+__pycache__/
+*.pyc
+
+# Local settings and secrets
+tools/python/server/config.json
+tools/python/editor/settings.json
+
+# System files
+.DS_Store
+Thumbs.db

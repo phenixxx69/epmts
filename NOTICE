@@ -1,0 +1,18 @@
+EPMTS — Easy Porn Media Tag System
+
+Required Notice: Copyright 2026 phenixxx69 (https://github.com/phenixxx69/epmts)
+
+This product is the original EPMTS project:
+    https://github.com/phenixxx69/epmts
+
+Licensed under the PolyForm Noncommercial License 1.0.0 (see LICENSE). Anyone who passes on
+any part of EPMTS must pass on these terms and the "Required Notice:" line above.
+
+Any commercial use needs a separate commercial license from the licensor: see COMMERCIAL.md.
+
+The shared tag catalogue (catalogue/catalogue.json) is the reference of every EPMTS tag id;
+a fork that creates its own tags must not present them as EPMTS tag ids.
+
+Third-party software included:
+- sql.js (web/vendor/sql.js), MIT License, Copyright (c) 2017 sql.js authors
+  — see web/vendor/sql.js/LICENSE.

@@ -1,0 +1,29 @@
+{
+  "_help": "Copy to config.json (the launcher does it and fills the keys). Relative paths start at the repository root.",
+
+  "backend": "sqlite",
+  "pack_dir": "packs/main",
+
+  "host": "127.0.0.1",
+  "port": 5055,
+  "public_base_url": "",
+
+  "_keys_help": "require_api_key false = any program on the allowed addresses may ask media, without a key.",
+  "require_api_key": true,
+  "api_keys": ["CHANGE_ME"],
+  "link_secret": "CHANGE_ME",
+  "link_ttl_seconds": 3600,
+  "video_wait_seconds": 2,
+  "cache_dir": "cache",
+
+  "_mysql_help": "Only for backend = mysql: same tables as a pack. media_storage: hash = file named <hash> in media_root, path = media.path under media_root, auto = both.",
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "",
+    "password": "",
+    "database": ""
+  },
+  "media_root": "",
+  "media_storage": "hash"
+}

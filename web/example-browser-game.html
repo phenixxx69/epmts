@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EPMTS browser game example</title>
+    <!--
+        Open this file directly in your browser (double click). It reads the pack in ../packs/main/
+        or the folder given as ?pack=... (relative to this file, ending with "/").
+        No server is needed: tags.sql.js is a plain script and sql-asm.js runs from file://.
+    -->
+    <script src="vendor/sql.js/sql-asm.js"></script>
+    <script src="epmts-pack.js"></script>
+    <style>
+        body { margin: 0; padding: 24px; background: #15131a; color: #f1edf6; font-family: Georgia, serif; }
+        main { max-width: 760px; margin: 0 auto; }
+        .scene { background: #221d2a; border-radius: 12px; padding: 20px; }
+        .media { margin: 16px 0; min-height: 120px; display: flex; justify-content: center; align-items: center; background: #0d0b10; border-radius: 10px; }
+        .media img, .media video { max-width: 100%; max-height: 480px; border-radius: 10px; }
+        button { font: inherit; padding: 8px 16px; border-radius: 999px; border: 0; background: #8a2c5d; color: #fff; cursor: pointer; margin-right: 8px; }
+        code { color: #ffc3de; }
+        .note { color: #a99db5; font-size: 14px; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Example scene</h1>
+    <div class="scene">
+        <p id="text">Loading the pack…</p>
+        <div class="media" id="media"></div>
+        <button type="button" id="next">Next scene</button>
+        <button type="button" id="person">Pick a person</button>
+    </div>
+    <p class="note">Each scene below asks the pack for a random media matching its tag ids. Edit the
+        <code>SCENES</code> list in this file with ids from <code>catalogue/TAGS.md</code>.</p>
+</main>
+<script>
+    var ExampleGame = {
+        // Each scene: a text and the tags of its picture (ids from catalogue/TAGS.md).
+        SCENES: [
+            {text: 'A woman waits for you in the tavern.', include: [1], format: 'img'},
+            {text: 'A short animated scene.', include: [1], format: 'video', maxVideoTime: 60},
+            {text: 'Anything from the pack.', include: [], format: 'all'}
+        ],
+        pack: null,
+        person: null,
+        index: 0,
+
+        // Loads the pack and wires the buttons.
+        init: function () {
+            var packUrl = new URLSearchParams(location.search).get('pack') || '../packs/main/';
+            document.getElementById('next').addEventListener('click', ExampleGame.handleNext);
+            document.getElementById('person').addEventListener('click', ExampleGame.handlePerson);
+            EpmtsPack.load(packUrl).then(function (pack) {
+                ExampleGame.pack = pack;
+                ExampleGame.showScene();
+            }, function (error) {
+                document.getElementById('text').textContent = 'Cannot load ' + packUrl + 'tags.sql.js — ' + error.message;
+            });
+        },
+
+        // Shows the current scene with a media from the person pack first, then the main pack.
+        showScene: function () {
+            var scene = ExampleGame.SCENES[ExampleGame.index];
+            var media = ExampleGame.person ? ExampleGame.person.select(scene) : null;
+            if (!media) {
+                media = ExampleGame.pack.select(scene); // explicit fallback, as the standard asks
+            }
+            document.getElementById('text').textContent = scene.text;
+            ExampleGame.render(media);
+        },
+
+        // Puts an <img> or <video> for the media in the scene.
+        render: function (media) {
+            var box = document.getElementById('media');
+            box.textContent = '';
+            if (!media) {
+                box.textContent = 'No media in the pack for these tags.';
+                return;
+            }
+            var element = document.createElement(media.type.indexOf('video/') === 0 ? 'video' : 'img');
+            element.src = media.url;
+            if (element.tagName === 'VIDEO') {
+                element.controls = true;
+                element.loop = true;
+                element.autoplay = true;
+                element.muted = true;
+            }
+            box.appendChild(element);
+        },
+
+        // Goes to the next scene.
+        handleNext: function () {
+            ExampleGame.index = (ExampleGame.index + 1) % ExampleGame.SCENES.length;
+            ExampleGame.showScene();
+        },
+
+        // Draws a portrait (gender + portrait tags) and keeps its person pack for the next scenes.
+        handlePerson: function () {
+            var portrait = ExampleGame.pack.select({include: [1, 8], format: 'img'});
+            ExampleGame.pack.person(portrait).then(function (person) {
+                ExampleGame.person = person;
+                document.getElementById('text').textContent = person
+                    ? 'This person will now appear in the scenes when the pack has matching media of them.'
+                    : 'No person pack matches (a person pack is made in the editor: Person › New person pack).';
+                ExampleGame.render(portrait);
+            });
+        }
+    };
+    ExampleGame.init();
+</script>
+</body>
+</html>

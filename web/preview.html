@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EPMTS preview</title>
+    <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<header>
+    <h1>EPMTS preview</h1>
+    <p>Try selections exactly as a game would. Click a tag to <b>include</b> it, right-click (or Alt+click)
+        to <b>exclude</b> it, click a type name to exclude the whole type.</p>
+    <p id="mode_note"></p>
+</header>
+<div class="layout">
+    <section class="panel">
+        <form id="connection">
+            <label id="api_key_label">API key <input id="api_key" type="password" autocomplete="off" placeholder="shown in the server window"></label>
+            <div id="pack_path_label">
+                <label class="picker">Choose a pack folder…
+                    <input id="pack_folder" type="file" webkitdirectory directory multiple hidden>
+                </label>
+                <label>or its path from this page <input id="pack_path" value="../packs/main/"></label>
+            </div>
+            <button type="submit">Connect</button>
+        </form>
+        <form id="request">
+            <label>Include tags <input id="include" placeholder="1,56"></label>
+            <label>Exclude tags <input id="exclude" placeholder=""></label>
+            <label>Exclude tag types <input id="exclude_types" placeholder="9"></label>
+            <div class="row">
+                <label>Format
+                    <select id="format">
+                        <option>img</option><option>gif</option><option>video</option><option>animated</option><option>all</option>
+                    </select>
+                </label>
+                <label>Convert
+                    <select id="convert">
+                        <option value="none">none (browser)</option><option>auto</option><option>png</option><option>jpg</option><option>ivf</option>
+                    </select>
+                </label>
+                <label>Max video s <input id="max_video_time" type="number" min="1" max="3600"></label>
+            </div>
+            <label>Person reference (referenceHash) <input id="reference_hash" placeholder="empty = whole catalogue"></label>
+            <div class="row">
+                <button type="submit">Draw a media</button>
+                <button type="button" id="copy_link" class="secondary">Copy link</button>
+                <button type="button" id="clear" class="secondary">Clear</button>
+            </div>
+        </form>
+        <p class="rule">Default exclusions and tagging rules of the standard are always applied.</p>
+        <div id="result" class="result"></div>
+        <pre id="exchange"></pre>
+    </section>
+    <section class="panel">
+        <h2>Tags <input id="tag_filter" placeholder="filter…"></h2>
+        <div id="tags" class="tags">Connect with your API key to load the catalogue.</div>
+    </section>
+</div>
+<script src="vendor/sql.js/sql-asm.js"></script>
+<script src="epmts-pack.js"></script>
+<script src="preview.js"></script>
+<script>EpmtsPreview.init();</script>
+</body>
+</html>

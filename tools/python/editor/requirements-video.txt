@@ -1,0 +1,4 @@
+# Optional: plays videos inside the editor (needs a Python version with PyAV wheels).
+# Without it the editor shows a still frame and opens videos in your system player.
+tkVideoPlayer==2.8
+av==9.0.0
